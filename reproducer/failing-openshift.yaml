@@ -1,0 +1,157 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.openshift.io/vcs-uri: <<unknown>>
+    app.quarkus.io/quarkus-version: 999-SNAPSHOT
+    app.quarkus.io/commit-id: 38bc8c0a10b4f35c4090d335c0c7d63becf8fb36
+    app.quarkus.io/vcs-uri: git@github.com:marcnuri-work/quarkusio-quarkus-issues-38018.git
+    app.quarkus.io/build-timestamp: 2024-01-24 - 09:54:24 +0000
+  labels:
+    app.kubernetes.io/name: app
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/managed-by: quarkus
+    app.openshift.io/runtime: quarkus
+  name: app
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app.kubernetes.io/name: app
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  type: ClusterIP
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app.kubernetes.io/name: app
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  name: openjdk-17
+spec:
+  dockerImageRepository: registry.access.redhat.com/ubi8/openjdk-17
+  lookupPolicy:
+    local: true
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    app.openshift.io/vcs-uri: <<unknown>>
+    app.quarkus.io/quarkus-version: 999-SNAPSHOT
+    app.quarkus.io/commit-id: 38bc8c0a10b4f35c4090d335c0c7d63becf8fb36
+    app.quarkus.io/vcs-uri: git@github.com:marcnuri-work/quarkusio-quarkus-issues-38018.git
+    app.quarkus.io/build-timestamp: 2024-01-24 - 09:54:24 +0000
+  labels:
+    app.kubernetes.io/name: app
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/managed-by: quarkus
+    app.openshift.io/runtime: quarkus
+  name: app
+spec:
+  lookupPolicy:
+    local: true
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    app.openshift.io/vcs-uri: <<unknown>>
+    app.quarkus.io/quarkus-version: 999-SNAPSHOT
+    app.quarkus.io/commit-id: 38bc8c0a10b4f35c4090d335c0c7d63becf8fb36
+    app.quarkus.io/vcs-uri: git@github.com:marcnuri-work/quarkusio-quarkus-issues-38018.git
+    app.quarkus.io/build-timestamp: 2024-01-24 - 09:54:24 +0000
+  labels:
+    app.kubernetes.io/name: app
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/managed-by: quarkus
+    app.openshift.io/runtime: quarkus
+  name: app
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: app:1.0.0-SNAPSHOT
+  source:
+    binary: {}
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: openjdk-17:1.18
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.openshift.io/vcs-uri: <<unknown>>
+    app.quarkus.io/quarkus-version: 999-SNAPSHOT
+    app.quarkus.io/commit-id: 38bc8c0a10b4f35c4090d335c0c7d63becf8fb36
+    app.quarkus.io/vcs-uri: git@github.com:marcnuri-work/quarkusio-quarkus-issues-38018.git
+    app.quarkus.io/build-timestamp: 2024-01-24 - 09:54:24 +0000
+  labels:
+    app.kubernetes.io/managed-by: quarkus
+    app.openshift.io/runtime: quarkus
+    app.kubernetes.io/name: app
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: app
+      app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  template:
+    metadata:
+      annotations:
+        app.openshift.io/vcs-uri: <<unknown>>
+        app.quarkus.io/quarkus-version: 999-SNAPSHOT
+        app.quarkus.io/commit-id: 38bc8c0a10b4f35c4090d335c0c7d63becf8fb36
+        app.quarkus.io/vcs-uri: git@github.com:marcnuri-work/quarkusio-quarkus-issues-38018.git
+        app.quarkus.io/build-timestamp: 2024-01-24 - 09:54:24 +0000
+      labels:
+        app.kubernetes.io/managed-by: quarkus
+        app.openshift.io/runtime: quarkus
+        app.kubernetes.io/name: app
+        app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    spec:
+      containers:
+        - env:
+            - name: JAVA_APP_JAR
+              value: /deployments/quarkus-run.jar
+          image: mnurisan-dev/app:1.0.0-SNAPSHOT
+          imagePullPolicy: Always
+          name: app
+          ports:
+            - containerPort: 9000
+              name: management
+              protocol: TCP
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    app.openshift.io/vcs-uri: <<unknown>>
+    app.quarkus.io/quarkus-version: 999-SNAPSHOT
+    app.quarkus.io/commit-id: 38bc8c0a10b4f35c4090d335c0c7d63becf8fb36
+    app.quarkus.io/vcs-uri: git@github.com:marcnuri-work/quarkusio-quarkus-issues-38018.git
+    app.quarkus.io/build-timestamp: 2024-01-24 - 09:54:24 +0000
+  labels:
+    app.kubernetes.io/name: app
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/managed-by: quarkus
+    app.openshift.io/runtime: quarkus
+  name: app
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: app
