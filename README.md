@@ -25,8 +25,16 @@ https://github.com/fedinskiy/reproducer/tree/openshift-pull-failure
 4s          Warning   Failed              pod/app-ff8f5d774-j26ph    Error: ImagePullBackOff
 ```
 
+The following invocations, do work:
+```
+mvn -Popenshift package
+```
 
-## WIP
+```
+mvn -Popenshift package -Dquarkus.container-image.group=mnurisan-dev -Dquarkus.platform.version=3.6.4
+```
+
+## Analysis
 
 If I inspect the Pod I get the following message:
 
@@ -36,7 +44,29 @@ Failed to pull image "mnurisan-dev/app:1.0.0-SNAPSHOT": rpc error: code = Unknow
 
 For some reason, it seems that it's trying to pull the image from `docker.io` instead of the internal registry.
 
-## Related issues and PRs
+### 3.6.4 works
+
+```
+mvn -Popenshift package -Dquarkus.container-image.group=mnurisan-dev -Dquarkus.platform.version=3.6.4
+```
+
+Works because it does generate a **`DeploymentConfig`** with a valid image stream reference.
+
+The snapshot version doesn't work because it generates a **`Deployment`** instead.
+This behavior changed after https://github.com/quarkusio/quarkus/pull/37229.
+
+
+### With no quarkus.container-image.group works
+
+OpenShift seems to correctly resolve the image stream provided that it doesn't have the prepended group on the name.
+
+However, once we prepend the group in the image name of a **`Deployment`**, it stops working.
+
+According to the [documentation](https://docs.openshift.com/container-platform/4.14/openshift_images/using-imagestreams-with-kube-resources.html), you can correctly use ImageStreams by annotating the `Pod` Template with `alpha.image.policy.openshift.io/resolve-names: '*'`
+
+I checked by manually replacing the template labels, and it does seem to work indeed.
+
+## Related links
 
 - https://github.com/quarkusio/quarkus/pull/37229
-- 
+- https://docs.openshift.com/container-platform/4.14/openshift_images/using-imagestreams-with-kube-resources.html
