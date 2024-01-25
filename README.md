@@ -66,6 +66,22 @@ According to the [documentation](https://docs.openshift.com/container-platform/4
 
 I checked by manually replacing the template labels, and it does seem to work indeed.
 
+## Further actions
+
+Ioannis [says](https://github.com/quarkusio/quarkus/issues/38018#issuecomment-1908300055) that he will give a quick look. No further action is required from our team for now.
+
+### JKube
+
+We have a similar situation at JKube:
+
+[OpenShift Maven|Gradle Plugin should use Deployments by default](https://github.com/eclipse/jkube/issues/1857)
+
+We need to consider finally moving onto Deployments instead of DeploymentConfigs.
+
+We also need to address the annotation problem.
+
+I've updated the issue accordingly.
+
 ## Related links
 
 - https://github.com/quarkusio/quarkus/pull/37229
