@@ -68,7 +68,11 @@ I checked by manually replacing the template labels, and it does seem to work in
 
 ## Further actions
 
-Ioannis [says](https://github.com/quarkusio/quarkus/issues/38018#issuecomment-1908300055) that he will give a quick look. No further action is required from our team for now.
+- 2024-01-24: Ioannis [says](https://github.com/quarkusio/quarkus/issues/38018#issuecomment-1908300055) that he will give a quick look. No further action is required from our team for now.
+- 2024-01-26: Ioannis fixes issue with https://github.com/quarkusio/quarkus/pull/38428
+- 2024-01-27: PR is merged (targets 3.9)
+
+
 
 ### JKube
 
